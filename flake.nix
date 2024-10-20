@@ -14,7 +14,7 @@
       devShells.${system}.default = pkgs.mkShell {
           # The Nix packages provided in the environment
           # Add any you need here
-          packages = with pkgs; [ arduino-cli ];
+          packages = with pkgs; [ arduino-cli python3 python312Packages.pyserial ];
 
           # Set any environment variables for your dev shell
           env = { };
@@ -26,10 +26,13 @@
           nativeBuildInputs = [
             (pkgs.writeScriptBin "build" ''
               #!/usr/bin/env zsh
-              arduino-cli compile --fqbn arduino:avr:mega 6502-monitor'')
+              arduino-cli compile --fqbn esp32:esp32:m5stack-cores3 --build-path build'')
             (pkgs.writeScriptBin "upload" ''
               #!/usr/bin/env zsh
-              arduino-cli upload --port /dev/ttyACM0 --fqbn arduino:avr:mega 6502-monitor'')
+              arduino-cli upload . --port /dev/ttyACM0 --fqbn esp32:esp32:m5stack-cores3 --input-dir build'')
+            (pkgs.writeScriptBin "monitor" ''
+              #!/usr/bin/env zsh
+              arduino-cli monitor -p /dev/ttyACM0 -b esp32:esp32:m5stack-cores3 -c 115200'')
           ];
         };
     };
