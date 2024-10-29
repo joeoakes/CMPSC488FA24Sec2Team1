@@ -1,0 +1,57 @@
+import os, sys, io
+import M5
+from M5 import *
+from hardware import *
+from unit import UltrasoundI2CUnit
+
+i2c0 = None
+ultrasonic_0 = None
+
+title0 = None
+label2 = None
+label0 = None
+label3 = None
+label1 = None
+label4 = None
+label5 = None
+label6 = None
+
+def setup():
+    global title0, label2, label0, label3, label1, label4, label5, label6, i2c0, ultrasonic_0
+
+    M5.begin()
+    i2c0 = I2C(0, scl=Pin(1), sda=Pin(2), freq=100000)
+    ultrasonic_0 = UltrasoundI2CUnit(i2c0)
+    Widgets.fillScreen(0x222222)
+    title0 = Widgets.Title("IMU CoreS3", 3, 0xFFFFFF, 0x0000FF, Widgets.FONTS.DejaVu18)
+    
+    label0 = Widgets.Label("Acc_x:", 1, 30, 1.0, 0xFFFFFF, 0x222222, Widgets.FONTS.DejaVu12)
+    label1 = Widgets.Label("Acc_y:", 1, 50, 1.0, 0xFFFFFF, 0x222222, Widgets.FONTS.DejaVu12)
+    label2 = Widgets.Label("Acc_z:", 1, 70, 1.0, 0xFFFFFF, 0x222222, Widgets.FONTS.DejaVu12)
+    label3 = Widgets.Label("Gyro_x:", 1, 90, 1.0, 0xFFFFFF, 0x222222, Widgets.FONTS.DejaVu12)
+    label4 = Widgets.Label("Gyro_y:", 1, 110, 1.0, 0xFFFFFF, 0x222222, Widgets.FONTS.DejaVu12)
+    label5 = Widgets.Label("Gyro_z:", 1, 130, 1.0, 0xFFFFFF, 0x222222, Widgets.FONTS.DejaVu12)
+    label6 = Widgets.Label("Ultrasonic:", 1, 150, 1.0, 0xFFFFFF, 0x222222, Widgets.FONTS.DejaVu12)
+
+def loop():
+    global title0, label2, label0, label3, label1, label4, label5, label6
+    M5.update()
+    label0.setText("Acc_x:" + str((Imu.getAccel())[0]))
+    label1.setText("Acc_y:" + str((Imu.getAccel())[1]))
+    label2.setText("Acc_z:" + str((Imu.getAccel())[2]))
+    label3.setText("Gyro_x:" + str((Imu.getGyro())[0]))
+    label4.setText("Gyro_y:" + str((Imu.getGyro())[1]))
+    label5.setText("Gyro_z:" + str((Imu.getGyro())[2]))
+    label6.setText("Ultrasonic:" + str(ultrasonic_0.get_target_distance(1)))
+
+if __name__ == "__main__":
+    try:
+        setup()
+        while True:
+            loop()
+    except (Exception, KeyboardInterrupt) as e:
+        try:
+            from utility import print_error_msg
+            print_error_msg(e)
+        except ImportError:
+            print("please update to latest firmware")
