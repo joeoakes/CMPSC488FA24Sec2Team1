@@ -3,9 +3,12 @@ import M5
 from M5 import *
 from hardware import *
 from unit import UltrasoundI2CUnit
+import socket
+import json
 
 i2c0 = None
 ultrasonic_0 = None
+tcpc = None
 
 title0 = None
 label2 = None
@@ -15,13 +18,22 @@ label1 = None
 label4 = None
 label5 = None
 label6 = None
+label7 = None
+label8 = None
+label9 = None
 
 def setup():
-    global title0, label2, label0, label3, label1, label4, label5, label6, i2c0, ultrasonic_0
+    global title0, label0, label1, label2, label3, label4, label5, label6, label7, label8, label9, i2c0, ultrasonic_0, tcpc
 
     M5.begin()
+    # Ultrasonic
     i2c0 = I2C(0, scl=Pin(1), sda=Pin(2), freq=100000)
     ultrasonic_0 = UltrasoundI2CUnit(i2c0)
+    # TCP Server
+    #tcpc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    #tcpc.connect(('0.0.0.0', 8000))
+    
+    # Show on Display
     Widgets.fillScreen(0x222222)
     title0 = Widgets.Title("IMU CoreS3", 3, 0xFFFFFF, 0x0000FF, Widgets.FONTS.DejaVu18)
     
@@ -31,18 +43,49 @@ def setup():
     label3 = Widgets.Label("Gyro_x:", 1, 90, 1.0, 0xFFFFFF, 0x222222, Widgets.FONTS.DejaVu12)
     label4 = Widgets.Label("Gyro_y:", 1, 110, 1.0, 0xFFFFFF, 0x222222, Widgets.FONTS.DejaVu12)
     label5 = Widgets.Label("Gyro_z:", 1, 130, 1.0, 0xFFFFFF, 0x222222, Widgets.FONTS.DejaVu12)
-    label6 = Widgets.Label("Ultrasonic:", 1, 150, 1.0, 0xFFFFFF, 0x222222, Widgets.FONTS.DejaVu12)
+    label6 = Widgets.Label("Gyro_z:", 1, 150, 1.0, 0xFFFFFF, 0x222222, Widgets.FONTS.DejaVu12)
+    label7 = Widgets.Label("Gyro_z:", 1, 170, 1.0, 0xFFFFFF, 0x222222, Widgets.FONTS.DejaVu12)
+    label8 = Widgets.Label("Gyro_z:", 1, 190, 1.0, 0xFFFFFF, 0x222222, Widgets.FONTS.DejaVu12)
+    label9 = Widgets.Label("Ultrasonic:", 1, 210, 1.0, 0xFFFFFF, 0x222222, Widgets.FONTS.DejaVu12)
 
 def loop():
-    global title0, label2, label0, label3, label1, label4, label5, label6
+    global title0, label1, label2, label3, label4, label5, label6, label7, label8, label9, ultrasonic_0, tcpc
     M5.update()
-    label0.setText("Acc_x:" + str((Imu.getAccel())[0]))
-    label1.setText("Acc_y:" + str((Imu.getAccel())[1]))
-    label2.setText("Acc_z:" + str((Imu.getAccel())[2]))
-    label3.setText("Gyro_x:" + str((Imu.getGyro())[0]))
-    label4.setText("Gyro_y:" + str((Imu.getGyro())[1]))
-    label5.setText("Gyro_z:" + str((Imu.getGyro())[2]))
-    label6.setText("Ultrasonic:" + str(ultrasonic_0.get_target_distance(1)))
+    accel = Imu.getAccel()
+    gyro = Imu.getGyro()
+    mag = Imu.getMag()
+    distance = ultrasonic_0.get_target_distance(1)
+
+    label0.setText("Acc_x: " + str(accel[0]))
+    label1.setText("Acc_y: " + str(accel[1]))
+    label2.setText("Acc_z: " + str(accel[2]))
+    label3.setText("Gyro_x: " + str(gyro[0]))
+    label4.setText("Gyro_y: " + str(gyro[1]))
+    label5.setText("Gyro_z: " + str(gyro[2]))
+    label6.setText("Mag_x: " + str(mag[0]))
+    label7.setText("Mag_y: " + str(mag[1]))
+    label8.setText("Mag_z: " + str(mag[2]))
+    label9.setText("Ultrasonic:: " + str(distance))
+
+    data = {
+        "accel": {
+            "x": accel[0],
+            "y": accel[1],
+            "z": accel[2]
+        },
+        "gyro": {
+            "x": gyro[0],
+            "y": gyro[1],
+            "z": gyro[2]
+        },
+        "mag": {
+          "x": mag[0],
+          "y": mag[1],
+          "z": mag[2]
+        },
+        "ultrasonic": distance
+    }
+    #tcpc.send(json.dumps(data).encode('utf-8'))
 
 if __name__ == "__main__":
     try:
