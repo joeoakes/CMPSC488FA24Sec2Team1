@@ -47,7 +47,7 @@ def logs(args):
 
 def check(args):
     print("Running systems check")
-    subprocess.run(["./jetson-check/jetson-check.sh"])
+    subprocess.run(["./pi-check.sh"], cwd="./pi-check")
 
 # parser = argparse.ArgumentParser(
 #     prog="LaserTagBot",
