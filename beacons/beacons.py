@@ -1,7 +1,6 @@
 import numpy as np
-from bluepy.btle import Scanner, DefaultDelegate
-
-BEACON_ADDRS = ["dc:0d:30:14:2f:00", "dc:0d:30:14:2f:26", "dc:0d:30:14:2f:2C"]
+import asyncio
+from bleak import BleakScanner
 
 def rssi_to_distance(rssi, reference_rssi, path_loss_exponent):
     """Convert RSSI to distance using the log-distance path loss model."""
@@ -25,7 +24,7 @@ def trilaterate(beacons, distances):
 
     # Calculate the coordinates using linear equations
     x = (C - (B/F)*E) / (A - (B/F)*D)
-    if A != 0:
+    if B != 0:
         y = (C - A*x) / B
     else:
         y = (F - D*x) / E
@@ -39,21 +38,18 @@ beacons = [
     (5, 10)  # Beacon C at (5, 10)
 ]
 
-class ScanDelegate(DefaultDelegate):
-    def __init__(self):
-        DefaultDelegate.__init__(self)
+async def main():
+    BEACON_ADDRS = ["DC:0D:30:14:2F:00", "DC:0D:30:14:2F:26", "DC:0D:30:14:2F:2C"]
 
+    distances = []
+    devices = await BleakScanner.discover()
+    for dev in devices:
+        if dev.address not in BEACON_ADDRS:
+            continue
+        distances.append(dev.rssi) 
 
-scanner = Scanner().withDelegate(ScanDelegate())
-devices = scanner.scan(3.0)
+    device_position = trilaterate(beacons, distances)
+    print(f"Estimated device position: {device_position}")
 
-distances = []
-for dev in devices:
-    if dev.addr not in BEACON_ADDRS:
-        continue
-    print(f"Device {dev.addr} RSSI={dev.rssi} dB")
-    distances.append(rssi_to_distance(dev.rssi, reference_rssi, path_loss_exponent))
+asyncio.run(main())
 
-# Calculate the device position
-device_position = trilaterate(beacons, distances)
-print(f"Estimated device position: {device_position}")

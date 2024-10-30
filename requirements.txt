@@ -1,5 +1,4 @@
 pymongo
 dnspython
-bluepy
 numpy
 bleak
