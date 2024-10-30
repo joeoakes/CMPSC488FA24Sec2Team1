@@ -2,7 +2,7 @@ import serial
 import json
 
 ser = serial.Serial(
-    port='/dev/SOMETHING',  # Gotta figure out what it is
+    port='/dev/ttyACM0',  # Gotta figure out what it is
     baudrate=115200,
     parity=serial.PARITY_NONE,
     stopbits=serial.STOPBITS_ONE,
@@ -12,7 +12,7 @@ ser = serial.Serial(
 try:
     while True:
         if ser.in_waiting:
-            line = ser.readline().decode('utf-8').strip()
+            line = ser.readline().strip()
             try:
                 data = json.loads(line)
                 print(data)
