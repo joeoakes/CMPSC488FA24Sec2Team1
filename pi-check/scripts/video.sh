@@ -7,4 +7,5 @@ Camera Check
 echo "Checking that camera is connected"
 test -e /dev/video0
 echo "Checking camera permissions"
-test -rw /dev/video0
+test -w /dev/video0
+test -r /dev/video0

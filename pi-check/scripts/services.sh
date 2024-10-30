@@ -3,7 +3,7 @@ echo "
 Services Check
 =============="
 # List of services to check
-services=("sshd" "NetworkManager")
+services=("ssh" "NetworkManager")
 
 # Color codes
 GREEN='\033[0;32m'
