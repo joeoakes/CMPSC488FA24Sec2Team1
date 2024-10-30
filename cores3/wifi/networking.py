@@ -2,7 +2,7 @@ import serial
 import json
 
 ser = serial.Serial(
-    port='/dev/ttyACM0',  # Gotta figure out what it is
+    port='/dev/ttyACM0',  # Find USB device using ls /dev
     baudrate=115200,
     parity=serial.PARITY_NONE,
     stopbits=serial.STOPBITS_ONE,
