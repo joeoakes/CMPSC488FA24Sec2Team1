@@ -27,6 +27,7 @@ class ImagePublisher(Node):
             video, _ = ret_video
             depth, _ = ret_depth
             self.vid_pub.publish(self.br.cv2_to_imgmsg(video))
+            self.depth_pub.publish(self.br.cv2_to_imgmsg(depth))
      
         self.get_logger().info('Publishing video video')
 
