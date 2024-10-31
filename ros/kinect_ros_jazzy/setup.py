@@ -20,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'kinect = kinect_ros_jazzy.kinect:main',
+            'publish = kinect_ros_jazzy.publish:main',
+            'sub = kinect_ros_jazzy.subscriber:main',
         ],
     },
 )
