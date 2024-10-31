@@ -21,7 +21,6 @@ cv2.namedWindow('Depth')
 cv2.namedWindow('RGB')
 keep_running = True
 
-
 def display_depth(dev, data, timestamp):
     global keep_running
     cv2.imshow('Depth', pretty_depth_cv(data))
