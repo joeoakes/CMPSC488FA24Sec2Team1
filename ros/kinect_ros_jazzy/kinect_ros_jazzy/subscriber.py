@@ -7,7 +7,7 @@ import cv2 # OpenCV library
 class ImageSubscriber(Node):
   def __init__(self):
     super().__init__('image_subscriber')
-    self.subscription = self.create_subscription( Image, '/kinect2/video', self.callback, 10)
+    self.subscription = self.create_subscription( Image, '/kinect2/rgb', self.callback, 10)
     self.br = CvBridge()
    
   def callback(self, data):
