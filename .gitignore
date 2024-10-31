@@ -10,3 +10,6 @@ cmake_install.cmake
 install_manifest.txt
 build
 devel
+
+# Python
+__pycache__

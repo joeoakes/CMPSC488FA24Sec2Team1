@@ -1,4 +1,9 @@
+# Logging
 pymongo
 dnspython
 numpy
 bleak
+
+# Steppers
+gpiozero
+lgpio
