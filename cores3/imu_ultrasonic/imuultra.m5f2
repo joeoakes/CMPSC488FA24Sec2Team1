@@ -8,7 +8,6 @@ import json
 i2c0 = None
 ultrasonic_0 = None
 
-title0 = None
 label0 = None
 label1 = None
 label2 = None
@@ -19,7 +18,6 @@ label6 = None
 label7 = None
 label8 = None
 label9 = None
-label10 = None
 
 def send_data(data):
   try:
@@ -29,7 +27,7 @@ def send_data(data):
 
 
 def setup():
-    global label0, label1, label2, label3, label4, label5, label6, label7, label8, label9, label10
+    global label0, label1, label2, label3, label4, label5, label6, label7, label8, label9
     global i2c0, ultrasonic_0
 
     M5.begin()
@@ -38,7 +36,7 @@ def setup():
     i2c0 = I2C(0, scl=Pin(1), sda=Pin(2), freq=100000)
     ultrasonic_0 = UltrasoundI2CUnit(i2c0)
 
-    # Show on Display
+    # Display
     Widgets.fillScreen(0x222222)
     
     label0 = Widgets.Label("Acc_x:", 1, 10, 1.0, 0xFFFFFF, 0x222222, Widgets.FONTS.DejaVu12)
@@ -53,7 +51,7 @@ def setup():
     label9 = Widgets.Label("Ultrasonic:", 1, 190, 1.0, 0xFFFFFF, 0x222222, Widgets.FONTS.DejaVu12)
 
 def loop():
-    global title0, label0, label1, label2, label3, label4, label5, label6, label7, label8, label9
+    global label0, label1, label2, label3, label4, label5, label6, label7, label8, label9
     global ultrasonic_0
     
     M5.update()
