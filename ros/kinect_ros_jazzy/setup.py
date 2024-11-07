@@ -21,7 +21,6 @@ setup(
     entry_points={
         'console_scripts': [
             'publish = kinect_ros_jazzy.publish:main',
-            'sub = kinect_ros_jazzy.subscriber:main',
         ],
     },
 )
