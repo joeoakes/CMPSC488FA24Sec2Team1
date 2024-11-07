@@ -8,6 +8,11 @@ from launch_ros.actions import Node
 def generate_launch_description():
     return LaunchDescription([
         Node(
+            package='log_to_mongodb',
+            executable='start_log',
+            name='log_to_mongodb'
+        ),
+        Node(
             package='kinect_ros_jazzy',
             executable='publish',
             name='kinect'
