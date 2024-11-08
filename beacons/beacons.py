@@ -2,7 +2,7 @@ import numpy as np
 import asyncio
 from bleak import BleakScanner
 
-def rssi_to_distance(rssi, reference_rssi, path_loss_exponent):
+def rssi_to_distance(rssi, reference_rssi=-60, path_loss_exponent=2):
     """Convert RSSI to distance using the log-distance path loss model."""
     return 10 ** ((reference_rssi - rssi) / (10 * path_loss_exponent))
 
@@ -40,16 +40,20 @@ beacons = [
 
 async def main():
     BEACON_ADDRS = ["DC:0D:30:14:2F:00", "DC:0D:30:14:2F:26", "DC:0D:30:14:2F:2C"]
+   
+    while(True):
+        distances = []
+        devices = await BleakScanner.discover()
+        for dev in devices:
+            if dev.address not in BEACON_ADDRS:
+                continue
+            distances.append(rssi_to_distance(dev.rssi)) 
+            print(dev.rssi, end=" ")
+        print()
+        print(distances)
 
-    distances = []
-    devices = await BleakScanner.discover()
-    for dev in devices:
-        if dev.address not in BEACON_ADDRS:
-            continue
-        distances.append(dev.rssi) 
-
-    device_position = trilaterate(beacons, distances)
-    print(f"Estimated device position: {device_position}")
-
+        device_position = trilaterate(beacons, distances)
+        print(f"Estimated device position: {device_position}")
+     
 asyncio.run(main())
 
