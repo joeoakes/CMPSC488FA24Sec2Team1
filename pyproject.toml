@@ -7,11 +7,21 @@ license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = ">=3.12,<3.14"
 
 
 [tool.poetry.group.gui.dependencies]
 pyfiglet = "^1.0.2"
+
+
+[tool.poetry.group.wheels.dependencies]
+adafruit-circuitpython-servokit = "^1.3.18"
+rpi-gpio = "^0.7.1"
+
+
+[tool.poetry.group.bluetooth.dependencies]
+bleak = "^0.22.3"
+dnspython = "^2.7.0"
 
 [build-system]
 requires = ["poetry-core"]
