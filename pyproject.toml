@@ -23,6 +23,11 @@ rpi-gpio = "^0.7.1"
 bleak = "^0.22.3"
 dnspython = "^2.7.0"
 
+
+[tool.poetry.group.stepper.dependencies]
+gpiozero = "^2.0.1"
+lgpio = "^0.2.2.0"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
