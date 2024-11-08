@@ -14,8 +14,7 @@ try:
         if ser.in_waiting:
             line = ser.readline().strip()
             try:
-                data = json.loads(line)
-                print(data)
+                print(str(line))
             except json.JSONDecodeError:
                 print("Invalid JSON received:", line)
 except KeyboardInterrupt:
