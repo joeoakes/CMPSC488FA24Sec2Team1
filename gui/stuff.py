@@ -1,6 +1,6 @@
 import curses
 import time
-import pyfiglet  # Import pyfiglet for ASCII art text
+import pyfiglet  # Make sure pyfiglet is installed
 
 def main(stdscr):
     curses.curs_set(0)
@@ -16,10 +16,9 @@ def main(stdscr):
     curses.init_pair(6, curses.COLOR_CYAN, curses.COLOR_BLUE)     # Attack mode color with blue background
     curses.init_pair(7, curses.COLOR_MAGENTA, curses.COLOR_BLUE)  # Defense mode color with blue background
 
-    status = False
-    mode = "OFF"
-    mode_color = curses.color_pair(4)
-    current_mode = "Attack"  # Start with "Attack" as the default mode
+    status = False  # Start with the robot OFF
+    current_mode = "Attack"  # Default mode is "Attack"
+    mode_color = curses.color_pair(6)  # Color for "Attack" mode
 
     # Object and Direction variables
     objects = ["Wall", "Cone", "Robot"]
@@ -28,8 +27,12 @@ def main(stdscr):
     direction_index = 0
     cycle_interval = 1  # Interval in seconds for cycling
 
+    # Initialize last update times for cycling
+    last_object_cycle_time = time.time()
+    last_direction_cycle_time = time.time()
+
     # Generate large ASCII art text for "ROBOT STATUS" using pyfiglet
-    ascii_art = pyfiglet.figlet_format("ROBOT STATUS")
+    ascii_art_status = pyfiglet.figlet_format("ROBOT STATUS")
 
     # Enable mouse events
     curses.mousemask(curses.ALL_MOUSE_EVENTS)
@@ -69,24 +72,29 @@ def main(stdscr):
         stdscr.attroff(curses.color_pair(2))
 
         # Draw large ASCII art text for "ROBOT STATUS" line-by-line
-        for i, line in enumerate(ascii_art.splitlines()):
+        for i, line in enumerate(ascii_art_status.splitlines()):
             stdscr.addstr(1 + i, 5, line, curses.color_pair(5) | curses.A_BOLD)
 
-        # Draw the ON/OFF box with left section background
+        # Draw the ON/OFF box below the ASCII art
         stdscr.addstr(8, 5, "###################", curses.color_pair(1))
         stdscr.addstr(9, 5, "#                 #", curses.color_pair(1))
         stdscr.addstr(10, 5, "#                 #", curses.color_pair(1))
-        stdscr.addstr(11, 5, "#                 #", curses.color_pair(1))  
+        stdscr.addstr(11, 5, "#                 #", curses.color_pair(1))
         stdscr.addstr(12, 5, "#                 #", curses.color_pair(1))
         stdscr.addstr(13, 5, "###################", curses.color_pair(1))
 
+        # Display ON/OFF status in the box
         on_off_text = "ON" if status else "OFF"
-        centered_text = on_off_text.center(5)  
-        stdscr.addstr(11, 13, centered_text, mode_color | curses.A_BOLD | curses.color_pair(1))
+        stdscr.addstr(11, 13, on_off_text.center(5), (curses.color_pair(1) if status else curses.color_pair(1)) | curses.A_BOLD)
 
-        # Update object and direction if the robot is ON
-        current_time = time.time()
+        # Only display Attack/Defense ASCII art if the robot is ON
         if status:
+            ascii_art_mode = pyfiglet.figlet_format(current_mode)
+            for i, line in enumerate(ascii_art_mode.splitlines()):
+                stdscr.addstr(15 + i, 5, line, mode_color | curses.A_BOLD)
+
+            # Update object and direction when ON
+            current_time = time.time()
             if current_time - last_object_cycle_time >= cycle_interval:
                 object_index = (object_index + 1) % len(objects)
                 last_object_cycle_time = current_time
@@ -95,13 +103,13 @@ def main(stdscr):
                 direction_index = (direction_index + 1) % len(directions)
                 last_direction_cycle_time = current_time
 
-            # Display the cycling object and direction with left section background when ON
-            stdscr.addstr(15, 5, f"Object Detected: {objects[object_index]}", curses.color_pair(5))
-            stdscr.addstr(16, 5, f"Direction Moving: {directions[direction_index]}", curses.color_pair(5))
+            # Display object detection and direction
+            stdscr.addstr(20, 5, f"Object Detected: {objects[object_index]}", curses.color_pair(5))
+            stdscr.addstr(21, 5, f"Direction Moving: {directions[direction_index]}", curses.color_pair(5))
         else:
-            # Display "None" and "Still" with left section background when OFF
-            stdscr.addstr(15, 5, "Object Detected: None", curses.color_pair(5))
-            stdscr.addstr(16, 5, "Direction Moving: Still", curses.color_pair(5))
+            # Display "None" and "Still" when OFF
+            stdscr.addstr(20, 5, "Object Detected: None", curses.color_pair(5))
+            stdscr.addstr(21, 5, "Direction Moving: Still", curses.color_pair(5))
 
         # Draw on-screen buttons with the right background color
         draw_buttons()
@@ -121,13 +129,9 @@ def main(stdscr):
                     action = button["action"]
                     if action == "toggle":
                         status = not status
-                        mode = current_mode if status else "OFF"
+                    elif action == "switch_mode" and status:  # Only switch modes if the robot is ON
+                        current_mode = "Defense" if current_mode == "Attack" else "Attack"
                         mode_color = curses.color_pair(6) if current_mode == "Attack" else curses.color_pair(7)
-                    elif action == "switch_mode":
-                        if status:  # Only switch modes if the robot is ON
-                            current_mode = "Defense" if current_mode == "Attack" else "Attack"
-                            mode = current_mode
-                            mode_color = curses.color_pair(6) if current_mode == "Attack" else curses.color_pair(7)
                     elif action == "quit":
                         return  # Exit the program
 
