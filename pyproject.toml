@@ -5,6 +5,7 @@ description = ""
 authors = ["Your Name <you@example.com>"]
 license = "MIT"
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = ">=3.12,<3.14"
@@ -23,10 +24,12 @@ rpi-gpio = "^0.7.1"
 bleak = "^0.22.3"
 dnspython = "^2.7.0"
 
-
-[tool.poetry.group.stepper.dependencies]
+[tool.poetry.group.targetting.dependencies]
+apriltag = "^0.0.16"
 gpiozero = "^2.0.1"
 lgpio = "^0.2.2.0"
+opencv-contrib-python = "^4.10.0.84"
+opencv-python = "^4.10.0.84"
 
 [build-system]
 requires = ["poetry-core"]
