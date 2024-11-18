@@ -1,22 +1,18 @@
-import cv2 as cv
-import numpy as np
+import apriltag
+import cv2
+import visualizeArilTag
 
-# Initialize video capture
-cap = cv.VideoCapture(2)
+cam = cv2.VideoCapture(0)
+options = apriltag.DetectorOptions(families="tag25h9")
+detector = apriltag.Detector(options)
+while 1:
+    success, img = cam.read()
 
-while True:
-    # Capture frame-by-frame
-    ret, frame = cap.read()
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    result = detector.detect(gray)
 
-    # Check if frame is successfully captured
-    if not ret:
-        print("Failed to grab frame")
+    overlay = visualizeArilTag.visualize(img, result, detector)
+    cv2.imshow("Camera", overlay)
+
+    if cv2.waitKey(1) == ord("q"):
         break
-    cv.imshow('Webcam', frame)
-    k = cv.waitKey(1) & 0xFF
-    if k == ord(' '):  # SPACE for escape
-        break
-
-# Release the capture and close all windows
-cap.release()
-cv.destroyAllWindows()
