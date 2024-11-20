@@ -3,10 +3,11 @@ import M5
 from M5 import *
 from hardware import *
 from unit import UltrasoundI2CUnit
-import json
 
 i2c0 = None
 ultrasonic_0 = None
+adc6 = None
+calibration_factor = 3.3 / 4095  # 12-bit ADC resolution for a 3.3V reference
 
 label0 = None
 label1 = None
@@ -18,23 +19,19 @@ label6 = None
 label7 = None
 label8 = None
 label9 = None
-
-def send_data(data):
-  try:
-    print(json.dumps(data))
-  except Exception as e:
-    print('Serial write error:', e)
+label10 = None
 
 
 def setup():
-    global label0, label1, label2, label3, label4, label5, label6, label7, label8, label9
-    global i2c0, ultrasonic_0
+    global label0, label1, label2, label3, label4, label5, label6, label7, label8, label9, label10
+    global i2c0, ultrasonic_0, adc6
 
     M5.begin()
 
     # Ultrasonic
     i2c0 = I2C(0, scl=Pin(1), sda=Pin(2), freq=100000)
     ultrasonic_0 = UltrasoundI2CUnit(i2c0)
+    adc6 = ADC(Pin(10), atten=ADC.ATTN_11DB)
 
     # Display
     Widgets.fillScreen(0x222222)
@@ -49,10 +46,11 @@ def setup():
     label7 = Widgets.Label("Mag_y:", 1, 150, 1.0, 0xFFFFFF, 0x222222, Widgets.FONTS.DejaVu12)
     label8 = Widgets.Label("Mag_z:", 1, 170, 1.0, 0xFFFFFF, 0x222222, Widgets.FONTS.DejaVu12)
     label9 = Widgets.Label("Ultrasonic:", 1, 190, 1.0, 0xFFFFFF, 0x222222, Widgets.FONTS.DejaVu12)
+    label10 = Widgets.Label("Solar Panel", 1, 210, 1.0, 0xFFFFFF, 0x222222, Widgets.FONTS.DejaVu12)
 
 def loop():
-    global label0, label1, label2, label3, label4, label5, label6, label7, label8, label9
-    global ultrasonic_0
+    global label0, label1, label2, label3, label4, label5, label6, label7, label8, label9, label10
+    global ultrasonic_0, adc6, calibration_factor
     
     M5.update()
     
@@ -60,6 +58,9 @@ def loop():
     gyro = Imu.getGyro()
     mag = Imu.getMag()
     distance = ultrasonic_0.get_target_distance(1)
+    
+    adc_value = adc6.read()
+    voltage = adc_value * calibration_factor
 
     label0.setText("Acc_x: " + str(accel[0]))
     label1.setText("Acc_y: " + str(accel[1]))
@@ -71,27 +72,11 @@ def loop():
     label7.setText("Mag_y: " + str(mag[1]))
     label8.setText("Mag_z: " + str(mag[2]))
     label9.setText("Ultrasonic: " + str(distance))
+    label10.setText("Solar Panel: " + str(voltage))
+    
+    data = 'accel = [' + str(accel[0]) + ', ' + str(accel[1]) + ', ' + str(accel[2]) + '], gyro = [' + str(gyro[0]) + ', '+ str(gyro[1]) + ', '+ str(gyro[2]) + '], mag = ['+ str(mag[0]) + ', ' + str(mag[1]) + ', ' + str(mag[2]) + ' ], ultrasonic = [' + str(distance) + '], solar = [' + str(voltage) + ']'
 
-    data = {
-        "accel": {
-            "x": accel[0],
-            "y": accel[1],
-            "z": accel[2]
-        },
-        "gyro": {
-            "x": gyro[0],
-            "y": gyro[1],
-            "z": gyro[2]
-        },
-        "mag": {
-          "x": mag[0],
-          "y": mag[1],
-          "z": mag[2]
-        },
-        "ultrasonic": distance
-    }
-
-    send_data(data)
+    print(data)
 
 if __name__ == "__main__":
     try:
