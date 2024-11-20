@@ -1,4 +1,0 @@
-board_manager:
-    additional_urls: []
-default_fqbn: esp32:esp32:m5stack-cores3
-default_port: /dev/ttyACM0
