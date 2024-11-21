@@ -5,26 +5,27 @@ from rclpy.node import Node
 from sensor_msgs.msg import Image, CameraInfo
 from cv_bridge import CvBridge
 import freenect
-import cv2
-import numpy as np
+
 
 class ImagePublisher(Node):
     def __init__(self):
         super().__init__("kinect_publisher")
-        self.vid_pub = self.create_publisher(Image, '/kinect2/rgb/image', 10)
-        self.depth_pub = self.create_publisher(Image, '/kinect2/depth', 10)
-        self.info_pub = self.create_publisher(CameraInfo, '/kinect2/rgb/camera_info', 10)
-          
+        self.vid_pub = self.create_publisher(Image, "/kinect2/rgb/image", 10)
+        self.depth_pub = self.create_publisher(Image, "/kinect2/depth", 10)
+        self.info_pub = self.create_publisher(
+            CameraInfo, "/kinect2/rgb/camera_info", 10
+        )
+
         timer_period = 0.1  # seconds
-          
+
         self.timer = self.create_timer(timer_period, self.timer_callback)
-             
+
         self.br = CvBridge()
 
     def timer_callback(self):
         ret_image = self.get_image(freenect.sync_get_video, "rgb8")
         ret_depth = self.get_image(freenect.sync_get_depth, "mono16")
-              
+
         if ret_image != None and ret_depth != None:
             self.vid_pub.publish(ret_image)
             self.depth_pub.publish(ret_depth)
@@ -36,10 +37,39 @@ class ImagePublisher(Node):
         camera_info.width = 640
         camera_info.height = 480
         camera_info.distortion_model = "plumb_bob"
-        camera_info.d = [0.012947732047700113, -0.016278227805096242, 0.0020719045565612245, -0.0012254560479249, 0.0]
-        camera_info.k = [362.02061428537024, 0.0, 210.76517637501865, 0.0, 405.17059240104345, 211.97321671296146, 0.0, 0.0, 1.0]
-        camera_info.r = [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0 ,0.0, 1.0]
-        camera_info.p = [361.9730224609375, 0.0, 209.32856710752822, 0.0, 0.0, 405.724365234375, 212.33942579256836, 0.0, 0.0, 0.0, 1.0, 0.0]
+        camera_info.d = [
+            0.012947732047700113,
+            -0.016278227805096242,
+            0.0020719045565612245,
+            -0.0012254560479249,
+            0.0,
+        ]
+        camera_info.k = [
+            362.02061428537024,
+            0.0,
+            210.76517637501865,
+            0.0,
+            405.17059240104345,
+            211.97321671296146,
+            0.0,
+            0.0,
+            1.0,
+        ]
+        camera_info.r = [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
+        camera_info.p = [
+            361.9730224609375,
+            0.0,
+            209.32856710752822,
+            0.0,
+            0.0,
+            405.724365234375,
+            212.33942579256836,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+        ]
         return camera_info
 
     def get_image(self, get_function, format):
@@ -55,7 +85,7 @@ class ImagePublisher(Node):
 
 
 def main(args=None):
-    logger = rclpy.logging.get_logger('logger')
+    logger = rclpy.logging.get_logger("logger")
     rclpy.init(args=args)
     image_publisher = ImagePublisher()
     try:
