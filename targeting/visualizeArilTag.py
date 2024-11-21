@@ -1,8 +1,10 @@
 import collections
 import numpy
 import cv2
+from apriltag import Detector
 
 # code get from https://github.com/Tinker-Twins/AprilTag/blob/main/scripts/apriltag_video.py
+
 
 def _draw_pose_box(overlay, camera_params, tag_size, pose, z_sign=1):
     opoints = (
@@ -108,9 +110,9 @@ def _annotate_detection(overlay, detection, center):
 def visualize(
     overlay,
     detection_results,
-    detector,
-    camera_params=(3156.71852, 3129.52243, 359.097908, 239.736909),
-    tag_size=0.0762,
+    detector: Detector,
+    camera_params=(1430.0, 1430.0, 480.0, 0.0),
+    tag_size=0.045,
     vizualization=3,
     verbose=0,
     annotation=0,
