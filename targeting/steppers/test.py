@@ -2,7 +2,6 @@ import gpiozero as GPIO
 import time
 from DRV8825 import DRV8825
 
-
 try:
     Motor1 = DRV8825(dir_pin=13, step_pin=19, enable_pin=12, mode_pins=(16, 17, 20))
     Motor2 = DRV8825(dir_pin=24, step_pin=18, enable_pin=4, mode_pins=(21, 22, 27))
@@ -17,12 +16,12 @@ try:
     # '1/16step': A cycle = 200 * 16 steps
     # '1/32step': A cycle = 200 * 32 steps
     """
-    Motor1.SetMicroStep('softward','fullstep')
-    for _ in range(500):
-        Motor1.TurnStep(Dir='forward', steps=200*32, stepdelay = 0.00000)
-        Motor1.TurnStep(Dir='backward', steps=200*32, stepdelay = 0.00000)
+    Motor2.set_micro_step("softward", "fullstep")
+    for _ in range(10):
+        Motor2.turn_step(dir="forward", steps=200 * 32, stepdelay=0.00500)
+        # Motor1.TurnStep(Dir="backward", steps=200 * 32, stepdelay=0.00000)
 
-    Motor1.Stop()
+    Motor2.stop()
 
     """
     # 28BJY-48:
@@ -41,12 +40,12 @@ try:
     Motor2.Stop()
     """
 
-    Motor1.Stop()
-    Motor2.Stop()
+    Motor1.stop()
+    Motor2.stop()
 
 except:
     # GPIO.cleanup()
     print("\nMotor stop")
-    Motor1.Stop()
-    Motor2.Stop()
+    Motor1.stop()
+    Motor2.stop()
     exit()
