@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<robot name="lazerbot" xmlns:xacro="http://ros.org/wiki/xacro">
+    <!-- Define materials at the top level -->
+    <material name="black">
+        <color rgba="0 0 0 1"/>
+    </material>
+    
+    <material name="blue">
+        <color rgba="0 0 1 1"/>
+    </material>
+
+    <material name="white">
+        <color rgba="1 1 1 1"/>
+    </material>
+
+    <link name="body_link">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+               <box size="0.35 0.256 0.041"/> 
+            </geometry>
+            <material name="white"/>
+        </visual>
+    </link>
+
+    <joint name="wheel_joint_fl" type="continuous">
+        <parent link="body_link"/>
+        <child link="wheel_link_fl"/>
+        <origin xyz="-0.105 -0.099 -0.008" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/> <!--FIX AXIS-->
+    </joint>
+
+    <link name="wheel_link_fl">
+        <visual>
+            <origin rpy="1.5707 0 0" xyz="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.024" length="0.025"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+    </link>
+
+    <joint name="wheel_joint_fr" type="continuous">
+        <parent link="body_link"/>
+        <child link="wheel_link_fr"/>
+        <origin xyz="-0.105 0.099 -0.008" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+    </joint>
+
+    <link name="wheel_link_fr">
+        <visual>
+            <origin rpy="1.5707 0 0" xyz="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.024" length="0.025"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+    </link>
+</robot>

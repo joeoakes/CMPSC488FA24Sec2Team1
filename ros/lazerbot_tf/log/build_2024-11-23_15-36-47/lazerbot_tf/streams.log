@@ -1,0 +1,58 @@
+[0.371s] Invoking command in '/mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/build/lazerbot_tf': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/mnt/c/Users/Dane/ros2_ws/src/install/tf_test:/mnt/c/Users/Dane/ros2_ws/src/install/run_nav2:/mnt/c/Users/Dane/ros2_ws/install/tf_test:/mnt/c/Users/Dane/ros2_ws/install/run_nav2:/opt/ros/jazzy /usr/bin/cmake /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf -DCMAKE_INSTALL_PREFIX=/mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/install/lazerbot_tf
+[1.505s] -- The C compiler identification is GNU 13.2.0
+[2.443s] -- The CXX compiler identification is GNU 13.2.0
+[3.234s] -- Detecting C compiler ABI info
+[4.528s] -- Detecting C compiler ABI info - done
+[4.561s] -- Check for working C compiler: /usr/bin/cc - skipped
+[4.562s] -- Detecting C compile features
+[4.563s] -- Detecting C compile features - done
+[4.733s] -- Detecting CXX compiler ABI info
+[5.774s] -- Detecting CXX compiler ABI info - done
+[5.813s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[5.814s] -- Detecting CXX compile features
+[5.815s] -- Detecting CXX compile features - done
+[6.376s] -- Found ament_cmake: 2.5.2 (/opt/ros/jazzy/share/ament_cmake/cmake)
+[21.828s] -- Found Python3: /usr/bin/python3 (found version "3.12.3") found components: Interpreter 
+[33.476s] -- Found ament_lint_auto: 0.17.1 (/opt/ros/jazzy/share/ament_lint_auto/cmake)
+[42.734s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[42.736s] -- Configured cppcheck include dirs: 
+[42.737s] -- Configured cppcheck exclude dirs and/or files: 
+[43.379s] -- Added test 'flake8' to check Python code syntax and style conventions
+[43.381s] -- Configured 'flake8' exclude dirs and/or files: 
+[44.548s] -- Added test 'lint_cmake' to check CMake code style
+[45.273s] -- Added test 'pep257' to check Python code against some of the docstring style conventions in PEP 257
+[50.137s] -- Added test 'uncrustify' to check C / C++ code style
+[50.138s] -- Configured uncrustify additional arguments: 
+[50.784s] -- Added test 'xmllint' to check XML markup files
+[51.366s] -- Configuring done (50.9s)
+[51.990s] -- Generating done (0.5s)
+[52.146s] -- Build files have been written to: /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/build/lazerbot_tf
+[52.158s] Invoked command in '/mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/build/lazerbot_tf' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/mnt/c/Users/Dane/ros2_ws/src/install/tf_test:/mnt/c/Users/Dane/ros2_ws/src/install/run_nav2:/mnt/c/Users/Dane/ros2_ws/install/tf_test:/mnt/c/Users/Dane/ros2_ws/install/run_nav2:/opt/ros/jazzy /usr/bin/cmake /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf -DCMAKE_INSTALL_PREFIX=/mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/install/lazerbot_tf
+[52.178s] Invoking command in '/mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/build/lazerbot_tf': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/mnt/c/Users/Dane/ros2_ws/src/install/tf_test:/mnt/c/Users/Dane/ros2_ws/src/install/run_nav2:/mnt/c/Users/Dane/ros2_ws/install/tf_test:/mnt/c/Users/Dane/ros2_ws/install/run_nav2:/opt/ros/jazzy /usr/bin/cmake --build /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/build/lazerbot_tf -- -j8 -l8
+[52.409s] Invoked command in '/mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/build/lazerbot_tf' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/mnt/c/Users/Dane/ros2_ws/src/install/tf_test:/mnt/c/Users/Dane/ros2_ws/src/install/run_nav2:/mnt/c/Users/Dane/ros2_ws/install/tf_test:/mnt/c/Users/Dane/ros2_ws/install/run_nav2:/opt/ros/jazzy /usr/bin/cmake --build /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/build/lazerbot_tf -- -j8 -l8
+[52.497s] Invoking command in '/mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/build/lazerbot_tf': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/mnt/c/Users/Dane/ros2_ws/src/install/tf_test:/mnt/c/Users/Dane/ros2_ws/src/install/run_nav2:/mnt/c/Users/Dane/ros2_ws/install/tf_test:/mnt/c/Users/Dane/ros2_ws/install/run_nav2:/opt/ros/jazzy /usr/bin/cmake --install /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/build/lazerbot_tf
+[52.519s] -- Install configuration: ""
+[52.526s] -- Installing: /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/install/lazerbot_tf/share/lazerbot_tf/src
+[52.569s] -- Installing: /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/install/lazerbot_tf/share/lazerbot_tf/src/lazerbot_tf.urdf
+[52.707s] -- Installing: /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/install/lazerbot_tf/share/lazerbot_tf/launch
+[52.800s] -- Installing: /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/install/lazerbot_tf/share/lazerbot_tf/launch/tf.launch.py
+[52.973s] -- Installing: /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/install/lazerbot_tf/share/lazerbot_tf/launch/tf.rviz.py
+[53.162s] -- Installing: /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/install/lazerbot_tf/share/lazerbot_tf/launch/tfrviz.launch.py
+[53.311s] -- Installing: /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/install/lazerbot_tf/share/lazerbot_tf/rviz
+[53.380s] -- Installing: /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/install/lazerbot_tf/share/lazerbot_tf/rviz/urdf_config.rviz
+[53.598s] -- Installing: /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/install/lazerbot_tf/share/ament_index/resource_index/package_run_dependencies/lazerbot_tf
+[53.862s] -- Installing: /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/install/lazerbot_tf/share/ament_index/resource_index/parent_prefix_path/lazerbot_tf
+[54.061s] -- Installing: /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/install/lazerbot_tf/share/lazerbot_tf/environment/ament_prefix_path.sh
+[54.178s] -- Installing: /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/install/lazerbot_tf/share/lazerbot_tf/environment/ament_prefix_path.dsv
+[54.292s] -- Installing: /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/install/lazerbot_tf/share/lazerbot_tf/environment/path.sh
+[54.404s] -- Installing: /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/install/lazerbot_tf/share/lazerbot_tf/environment/path.dsv
+[54.552s] -- Installing: /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/install/lazerbot_tf/share/lazerbot_tf/local_setup.bash
+[54.699s] -- Installing: /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/install/lazerbot_tf/share/lazerbot_tf/local_setup.sh
+[54.874s] -- Installing: /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/install/lazerbot_tf/share/lazerbot_tf/local_setup.zsh
+[55.037s] -- Installing: /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/install/lazerbot_tf/share/lazerbot_tf/local_setup.dsv
+[55.217s] -- Installing: /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/install/lazerbot_tf/share/lazerbot_tf/package.dsv
+[55.514s] -- Installing: /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/install/lazerbot_tf/share/ament_index/resource_index/packages/lazerbot_tf
+[55.831s] -- Installing: /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/install/lazerbot_tf/share/lazerbot_tf/cmake/lazerbot_tfConfig.cmake
+[56.001s] -- Installing: /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/install/lazerbot_tf/share/lazerbot_tf/cmake/lazerbot_tfConfig-version.cmake
+[56.168s] -- Installing: /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/install/lazerbot_tf/share/lazerbot_tf/package.xml
+[56.232s] Invoked command in '/mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/build/lazerbot_tf' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/mnt/c/Users/Dane/ros2_ws/src/install/tf_test:/mnt/c/Users/Dane/ros2_ws/src/install/run_nav2:/mnt/c/Users/Dane/ros2_ws/install/tf_test:/mnt/c/Users/Dane/ros2_ws/install/run_nav2:/opt/ros/jazzy /usr/bin/cmake --install /mnt/c/Users/Dane/ros2_ws/src/lazerbot_tf/build/lazerbot_tf
