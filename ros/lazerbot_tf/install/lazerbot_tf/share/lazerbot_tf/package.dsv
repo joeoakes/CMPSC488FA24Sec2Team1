@@ -1,0 +1,6 @@
+source;share/lazerbot_tf/hook/cmake_prefix_path.dsv
+source;share/lazerbot_tf/hook/cmake_prefix_path.sh
+source;share/lazerbot_tf/local_setup.bash
+source;share/lazerbot_tf/local_setup.dsv
+source;share/lazerbot_tf/local_setup.sh
+source;share/lazerbot_tf/local_setup.zsh
