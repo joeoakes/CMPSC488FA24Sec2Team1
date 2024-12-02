@@ -1,4 +1,6 @@
 from setuptools import find_packages, setup
+import os
+from glob import glob
 
 package_name = 'run_nav2'
 
@@ -10,16 +12,20 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        ('share/' + package_name + '/launch', ['launch/nav2_proxy.launch.py']),
+        (os.path.join('share', package_name, 'launch'), 
+         glob(os.path.join('launch', '*launch.[pxy][yma]*')))
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='team1',
-    maintainer_email='55195587+pwjensen@users.noreply.github.com',
+    maintainer='root',
+    maintainer_email='root@todo.todo',
     description='TODO: Package description',
     license='TODO: License declaration',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'goalpose = run_nav2.goalpose:main'
         ],
     },
 )

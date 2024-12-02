@@ -11,5 +11,11 @@ def generate_launch_description():
             PythonLaunchDescriptionSource([
                 FindPackageShare("nav2_bringup"),"/launch","/bringup_launch.py"
             ])
+        ),
+        Node(
+            package = 'run_nav2',
+            executable= 'goalpose',
+            name = 'goalpose',
+            output = "screen"
         )
     ])

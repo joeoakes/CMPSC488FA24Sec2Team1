@@ -1,0 +1,22 @@
+[4.688s] Invoking command in '/mnt/c/Users/Dane/ros2_ws/src/run_nav2': PYTHONPATH=/mnt/c/Users/Dane/ros2_ws/src/run_nav2/build/run_nav2/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/mnt/c/Users/Dane/ros2_ws/src/run_nav2/install/run_nav2/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base build/run_nav2 build --build-base /mnt/c/Users/Dane/ros2_ws/src/run_nav2/build/run_nav2/build install --record /mnt/c/Users/Dane/ros2_ws/src/run_nav2/build/run_nav2/install.log --single-version-externally-managed install_data
+[6.634s] running egg_info
+[6.689s] writing build/run_nav2/run_nav2.egg-info/PKG-INFO
+[6.701s] writing dependency_links to build/run_nav2/run_nav2.egg-info/dependency_links.txt
+[6.707s] writing entry points to build/run_nav2/run_nav2.egg-info/entry_points.txt
+[6.713s] writing requirements to build/run_nav2/run_nav2.egg-info/requires.txt
+[6.718s] writing top-level names to build/run_nav2/run_nav2.egg-info/top_level.txt
+[6.922s] reading manifest file 'build/run_nav2/run_nav2.egg-info/SOURCES.txt'
+[7.018s] writing manifest file 'build/run_nav2/run_nav2.egg-info/SOURCES.txt'
+[7.023s] running build
+[7.024s] running build_py
+[7.047s] running install
+[7.065s] running install_lib
+[7.189s] running install_data
+[7.235s] copying launch/nav2_proxy.launch.py -> /mnt/c/Users/Dane/ros2_ws/src/run_nav2/install/run_nav2/share/run_nav2/launch
+[7.258s] running install_egg_info
+[7.323s] removing '/mnt/c/Users/Dane/ros2_ws/src/run_nav2/install/run_nav2/lib/python3.12/site-packages/run_nav2-0.0.0-py3.12.egg-info' (and everything under it)
+[7.402s] Copying build/run_nav2/run_nav2.egg-info to /mnt/c/Users/Dane/ros2_ws/src/run_nav2/install/run_nav2/lib/python3.12/site-packages/run_nav2-0.0.0-py3.12.egg-info
+[7.961s] running install_scripts
+[8.775s] Installing goalpose script to /mnt/c/Users/Dane/ros2_ws/src/run_nav2/install/run_nav2/lib/run_nav2
+[8.800s] writing list of installed files to '/mnt/c/Users/Dane/ros2_ws/src/run_nav2/build/run_nav2/install.log'
+[8.876s] Invoked command in '/mnt/c/Users/Dane/ros2_ws/src/run_nav2' returned '0': PYTHONPATH=/mnt/c/Users/Dane/ros2_ws/src/run_nav2/build/run_nav2/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/mnt/c/Users/Dane/ros2_ws/src/run_nav2/install/run_nav2/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base build/run_nav2 build --build-base /mnt/c/Users/Dane/ros2_ws/src/run_nav2/build/run_nav2/build install --record /mnt/c/Users/Dane/ros2_ws/src/run_nav2/build/run_nav2/install.log --single-version-externally-managed install_data
