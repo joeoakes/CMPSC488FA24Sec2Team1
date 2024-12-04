@@ -25,7 +25,9 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'goalpose = run_nav2.goalpose:main'
+            'goalpose = run_nav2.goalpose:main',
+            'odom_base_tf = run_nav2.odom_base_tf:main',
+            'odom_test_data = run_nav2.odom_test_data:main'
         ],
     },
 )

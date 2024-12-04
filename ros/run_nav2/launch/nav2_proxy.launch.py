@@ -17,5 +17,17 @@ def generate_launch_description():
             executable= 'goalpose',
             name = 'goalpose',
             output = "screen"
+        ),
+        Node(
+            package = 'run_nav2',
+            executable= 'odom_base_tf',
+            name = 'odom_base_tf',
+            output = 'screen'
+        ),
+        Node(
+            package = 'run_nav2',
+            executable= 'odom_test_data',
+            name = 'odom_test_data',
+            output = 'screen'
         )
     ])
