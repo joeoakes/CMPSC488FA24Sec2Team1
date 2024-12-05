@@ -33,5 +33,13 @@ def generate_launch_description():
                 'robot_description': Command(['xacro ', LaunchConfiguration('urdf_path')]),
                 'use_sim_time': False
             }]
-        )
+        ),
+        Node(
+            package="lazerbot_tf",
+            executable = "odom-baseTF",
+            name= "odom-baseTF",
+            output="screen")
+        
     ])
+
+    

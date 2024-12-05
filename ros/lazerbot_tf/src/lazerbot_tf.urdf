@@ -17,7 +17,7 @@
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry>
-               <box size="0.35 0.256 0.041"/> 
+               <box size="0.35 0.175 0.041"/> 
             </geometry>
             <material name="white"/>
         </visual>
@@ -26,8 +26,8 @@
     <joint name="wheel_joint_fl" type="continuous">
         <parent link="base_link"/>
         <child link="wheel_link_fl"/>
-        <origin xyz="-0.105 -0.099 -0.008" rpy="0 0 0"/>
-        <axis xyz="0 1 0"/> <!--FIX AXIS-->
+        <origin xyz="0.105 -0.099 -0.008" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/> 
     </joint>
 
     <link name="wheel_link_fl">
@@ -43,7 +43,7 @@
     <joint name="wheel_joint_fr" type="continuous">
         <parent link="base_link"/>
         <child link="wheel_link_fr"/>
-        <origin xyz="-0.105 0.099 -0.008" rpy="0 0 0"/>
+        <origin xyz="0.105 0.099 -0.008" rpy="0 0 0"/>
         <axis xyz="0 1 0"/>
     </joint>
 
@@ -60,7 +60,7 @@
     <joint name="wheel_joint_br" type="continuous">
         <parent link="base_link"/>
         <child link="wheel_link_br"/>
-        <origin xyz="0.105 0.099 -0.008" rpy="0 0 0"/>
+        <origin xyz="-0.105 0.099 -0.008" rpy="0 0 0"/>
         <axis xyz="0 1 0"/>
     </joint>
 
@@ -77,7 +77,7 @@
     <joint name="wheel_joint_bl" type="continuous">
         <parent link="base_link"/>
         <child link="wheel_link_bl"/>
-        <origin xyz="0.105 -0.099 -0.008" rpy="0 0 0"/>
+        <origin xyz="-0.105 -0.099 -0.008" rpy="0 0 0"/>
         <axis xyz="0 1 0"/>
     </joint>
 
@@ -86,6 +86,38 @@
             <origin rpy="1.5707 0 0" xyz="0 0 0"/>
             <geometry>
                 <cylinder radius="0.024" length="0.025"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+    </link>
+
+    <joint name="bed_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="bed_link"/>
+        <origin xyz="-0.065 0 0.051"/>
+    </joint>
+
+    <link name="bed_link">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <box size="0.28 0.26 0.06"/>
+            </geometry>
+            <material name="white"/>
+        </visual>
+    </link>
+
+    <joint name = "cab_joint" type="fixed"> 
+        <parent link="base_link"/>
+        <child link="cab_link"/>
+        <origin xyz = "0.189 0 0.155"/>
+    </joint>
+
+    <link name = "cab_link">
+        <visual>
+            <origin rpy = "0 0 0" xyz = "0 0 0"/>
+            <geometry>
+                <box size = "0.227 0.244 0.27"/>
             </geometry>
             <material name="black"/>
         </visual>
