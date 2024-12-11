@@ -1,37 +1,36 @@
+from time import sleep
 from typing import Tuple
-from steppers.DRV8825 import DRV8825
 
-FULL_STEPS_PER_ROT = 200
-MICROSTEPS = 32
-
-MICROSTEPS_PER_DEG = FULL_STEPS_PER_ROT * MICROSTEPS / 360
-STEP_DELAY = 0.0001
+from adafruit_servokit import ServoKit
 
 
 class Turret:
     theta: float
     phi: float
-    theta_motor: DRV8825
-    phi_motor: DRV8825
+    _servo_kit: ServoKit
+    theta_channel: int
+    phi_channel: int
     theta_limits: Tuple[float, float]
     phi_limits: Tuple[float, float]
 
     def __init__(
         self,
-        theta_motor: DRV8825,
-        phi_motor: DRV8825,
+        theta_channel: int,
+        phi_channel: int,
         theta_limits: Tuple[float, float],
         phi_limits: Tuple[float, float],
     ):
         self.theta = float(0)
         self.phi = float(0)
-        self.theta_motor = theta_motor
-        self.phi_motor = phi_motor
+        self.servo_kit = ServoKit(channels=16)
+        self.theta_channel = theta_channel
+        self.phi_channel = phi_channel
         self.theta_limits = theta_limits
         self.phi_limits = phi_limits
 
-        self.theta_motor.set_micro_step("softward", "fullstep")
-        self.phi_motor.set_micro_step("softward", "fullstep")
+        self.servo_kit.servo[self.theta_channel].set_pulse_width_range(500, 2500)
+        self.servo_kit.servo[self.phi_channel].set_pulse_width_range(500, 2500)
+        self.move_to_zero()
 
     def rotate(self, d_theta: float, d_phi: float):
         """
@@ -51,42 +50,34 @@ class Turret:
         if new_phi < self.phi_limits[0] or new_phi > self.phi_limits[1]:
             raise ValueError("d_phi will take the phi angle outside the limits")
 
-        theta_direction = "forward" if d_theta > 0 else "backward"
-        phi_direction = "forward" if d_phi > 0 else "backward"
-
-        self.theta_motor.turn_step(
-            dir=theta_direction,
-            steps=int(abs(d_theta * MICROSTEPS_PER_DEG)),
-            stepdelay=STEP_DELAY,
-        )
-        self.phi_motor.turn_step(
-            dir=phi_direction,
-            steps=int(abs(d_phi * MICROSTEPS_PER_DEG)),
-            stepdelay=STEP_DELAY,
-        )
-
-        self.stop()
+        self.servo_kit.servo[self.theta_channel].angle = new_theta
+        self.servo_kit.servo[self.phi_channel].angle = new_phi
 
         self.theta = new_theta
         self.phi = new_phi
 
     def move_to_zero(self):
-        self.rotate(-self.theta, -self.phi)
+        self.servo_kit.servo[self.theta_channel].angle = 0
+        self.servo_kit.servo[self.phi_channel].angle = 0
+        self.theta = 0
+        self.phi = 0
 
     def reset_calibration(self):
         self.theta = 0
         self.phi = 0
 
-    def stop(self):
-        self.theta_motor.stop()
-        self.phi_motor.stop()
-
 
 def default_turret():
-    motor1 = DRV8825(dir_pin=13, step_pin=19, enable_pin=12, mode_pins=(16, 17, 20))
-    motor2 = DRV8825(dir_pin=24, step_pin=18, enable_pin=4, mode_pins=(21, 22, 27))
-
     theta_limits = (float("-inf"), float("inf"))
     phi_limits = (float("-inf"), float("inf"))  # TODO: Check these bounds
 
-    return Turret(motor1, motor2, theta_limits, phi_limits)
+    return Turret(8, 9, theta_limits, phi_limits)
+
+
+if __name__ == "__main__":
+    turret = default_turret()
+    for i in range(0, 12):
+        print(i)
+        turret.rotate(i, i)
+        sleep(0.5)
+    # turret.move_to_zero()
