@@ -7,6 +7,8 @@ from sensor_msgs.msg import Imu
 import serial
 import json
 
+G_TO_MS2 = 9.80665
+
 
 class ImuPublisher(Node):
     def __init__(self):
@@ -35,13 +37,14 @@ class ImuPublisher(Node):
                 imuData.header.frame_id = "cores3_imu"
                 imuData.header.stamp = self.get_clock().now()
 
+                # need to find out if cores3 is in deg/sec or rad/sec, the unit need to be in rad/sex
                 imuData.angular_velocity.z = data.gyro.z
                 imuData.angular_velocity.y = data.gyro.y
                 imuData.angular_velocity.z = data.gyro.z
 
-                imuData.linear_acceleration.z = data.accel.z
-                imuData.linear_acceleration.y = data.accel.y
-                imuData.linear_acceleration.z = data.accel.z
+                imuData.linear_acceleration.z = round(data.accel.z * G_TO_MS2, 5)
+                imuData.linear_acceleration.y = round(data.accel.y * G_TO_MS2, 5)
+                imuData.linear_acceleration.x = round(data.accel.x * G_TO_MS2, 5)
 
                 imuData.orientation.w = 1
                 imuData.orientation.z = data.mag.z
