@@ -1,14 +1,11 @@
 #!/usr/bin/env bash
 
-from geometry_msgs.msg import Quaternion
 import rclpy
 from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
 from sensor_msgs.msg import Imu
 import serial
 import json
-
-from std_msgs.msg import Header
 
 
 class ImuPublisher(Node):
@@ -27,6 +24,7 @@ class ImuPublisher(Node):
             stopbits=serial.STOPBITS_ONE,
             bytesize=serial.EIGHTBITS,
         )
+        self.get_logger().info("Cores3 Imu Publisher started")
 
     def timer_callback(self):
         if self.serial.in_waiting:
@@ -34,24 +32,32 @@ class ImuPublisher(Node):
             try:
                 data = json.loads(line)
                 imuData = Imu()
+                imuData.header.frame_id = "cores3_imu"
                 imuData.header.stamp = self.get_clock().now()
-                imuData.angular_velocity = data.gyro
-                imuData.linear_acceleration = data.accel
-                imuData.orientation = data.mag  # Quaternion()
-                self.get_logger().info(data)
+
+                imuData.angular_velocity.z = data.gyro.z
+                imuData.angular_velocity.y = data.gyro.y
+                imuData.angular_velocity.z = data.gyro.z
+
+                imuData.linear_acceleration.z = data.accel.z
+                imuData.linear_acceleration.y = data.accel.y
+                imuData.linear_acceleration.z = data.accel.z
+
+                imuData.orientation.w = 1
+                imuData.orientation.z = data.mag.z
+                imuData.orientation.y = data.mag.y
+                imuData.orientation.z = data.mag.z
+                self.imu_pub.publish(imuData)
             except json.JSONDecodeError:
                 self.get_logger().warn(f"Invalid JSON received: {line}")
 
 
 def main(args=None):
-    logger = rclpy.logging.get_logger("logger")
     rclpy.init(args=args)
     imu = ImuPublisher()
     try:
-        logger.info("Started publishing Imu")
         rclpy.spin(imu)
     except (KeyboardInterrupt, ExternalShutdownException):
-        logger.info("Shutting down gracefully")
         pass
 
     imu.serial.close()
