@@ -9,9 +9,9 @@ from launch_ros.actions import Node
 def generate_launch_description():
     return LaunchDescription(
         [
-            Node(
-                package="log_to_mongodb", executable="start_log", name="log_to_mongodb"
-            ),
+            # Node(
+            #     package="log_to_mongodb", executable="start_log", name="log_to_mongodb"
+            # ),
             Node(package="kinect_ros_jazzy", executable="publish", name="kinect"),
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(
@@ -32,6 +32,7 @@ def generate_launch_description():
                     "frame_id": "kinect_link",
                     "approx_sync": "true",
                     "rtabmap_viz": "false",
+                    # "rtabmap_viz": "true",
                     # "rviz": "true",
                 }.items(),
             ),

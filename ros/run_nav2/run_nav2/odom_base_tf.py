@@ -27,7 +27,7 @@ class OdomTransformBroadcaster(Node):
         transform = TransformStamped()
         
         # Set header
-        transform.header.stamp = self.get_clock().now().to_msg()
+        transform.header.stamp = msg.header.stamp
         transform.header.frame_id = 'odom'
         transform.child_frame_id = 'base_link'
         
@@ -41,6 +41,11 @@ class OdomTransformBroadcaster(Node):
         
         # Broadcast transform
         self.tf_broadcaster.sendTransform(transform)
+
+        if self.count_subscribers('tf') > 0:
+            self.get_logger().debug(f'Published transform: odom->base_link: '
+                                f'pos:[{transform.transform.translation.x:.2f}, '
+                                f'{transform.transform.translation.y:.2f}]')
 
 def main():
     rclpy.init()

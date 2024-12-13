@@ -295,9 +295,16 @@ def launch_setup(context, *args, **kwargs):
                 "scan_normal_k": LaunchConfiguration('scan_normal_k'),
                 "landmark_linear_variance": LaunchConfiguration('tag_linear_variance'),
                 "landmark_angular_variance": LaunchConfiguration('tag_angular_variance'),
-                "Mem/IncrementalMemory": ConditionalText("true", "false", IfCondition(PythonExpression(["'", LaunchConfiguration('localization'), "' != 'true'"]))._predicate_func(context)).perform(context),
+                "Mem/IncrementalMemory": "true",
                 "Mem/InitWMWithAllNodes": ConditionalText("true", "false", IfCondition(PythonExpression(["'", LaunchConfiguration('localization'), "' == 'true'"]))._predicate_func(context)).perform(context),
-                "Rtabmap/DetectionRate": '3.0',
+                "Mem/RehearsalSimilarity":'0.45',
+		 "Rtabmap/DetectionRate":'3.0',
+		"RGBD/ProxityBySpace":"true",
+		"Mem/STMSize":'30',
+		"Mem/NotLinkedNodesKept":"true",
+		"Grid/Enabled":"true",
+		"publish_full_map":"true",
+                "map_always_update": True
             }],
             remappings=[
                 ("map", LaunchConfiguration('map_topic')),

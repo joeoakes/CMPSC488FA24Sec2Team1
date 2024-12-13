@@ -20,7 +20,7 @@ class MotorDriver(Node):
         self.motor = MotorController()
 
         self.subscription = self.create_subscription(
-            String, "/move_cmd", self.cmd_callback, 10
+            String, "/move_cmd", self.cmd_callback, 1
         )
 
         self.get_logger().info("Directional Motor Driver Node Initialized")
@@ -45,9 +45,9 @@ class MotorDriver(Node):
             case "backward":
                 self.motor.move_backward(speed)
             case "turn_left":
-                self.motor.rotate_clockwise(speed)
+                self.motor.rotate_counterclockwise(speed/3)
             case "turn_right":
-                self.motor.rotate_counterclockwise(speed)
+                self.motor.rotate_clockwise(speed/3)
             case "stop":
                 self.motor.stop_all()
             case _:
