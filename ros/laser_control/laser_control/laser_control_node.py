@@ -8,7 +8,7 @@ import time
 class LaserControlNode(Node):
     def __init__(self):
         super().__init__("laser_control_node")
-        self.laser = OutputDevice(24)  # CHANGE NUMBER TO USED GPIO PIN
+        self.laser = OutputDevice(17)  # CHANGE NUMBER TO USED GPIO PIN
 
         self.subscription = self.create_subscription(
             Float32, "/fire_lazer", self.laser_callback, 10
