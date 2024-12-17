@@ -11,7 +11,7 @@ BACK_LEFT = 2
 BACK_RIGHT = 3
 
 THETA_LIMIT = (0, 70)
-PHI_LIMIT = (0, 70)
+PHI_LIMIT = (0, 180)
 
 
 class MotorDriver(Node):
@@ -22,8 +22,7 @@ class MotorDriver(Node):
 
         # Initialize ServoKit for PCA9685
         self.motor = MotorController()
-        self.turret = Turret(8, 9, THETA_LIMIT, PHI_LIMIT)
-        self.turret_degree = 0
+        self.turret = Turret(8, 9, THETA_LIMIT, PHI_LIMIT, 45)
 
         self.subscription = self.create_subscription(
             String, "/move_cmd", self.cmd_callback, 1
@@ -51,6 +50,18 @@ class MotorDriver(Node):
                 fire = Float32()
                 fire.data = 1.0
                 self.laser_fire.publish(fire)
+            case "turret_right":
+                self.last_direction = ""
+                try:
+                    self.turret.rotate(0, -1)
+                except ValueError:
+                    pass
+            case "turret_left":
+                self.last_direction = ""
+                try:
+                    self.turret.rotate(0, 1)
+                except ValueError:
+                    pass
             case "turret_down":
                 self.last_direction = ""
                 try:
@@ -63,6 +74,9 @@ class MotorDriver(Node):
                     self.turret.rotate(-1, 0)
                 except ValueError:
                     pass
+            case "zero_turret":
+                self.turret.slow_zero()
+                self.get_logger().info("zeroing")
             case "strafe_left":
                 self.motor.move_left(speed)
             case "strafe_right":

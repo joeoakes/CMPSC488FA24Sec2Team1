@@ -27,9 +27,15 @@ class MovementPublisher(Node):
                 match str(key):
                     case " ":
                         movement.data = "fire"
-                    case "k":
+                    case "r":
+                        movement.data = "zero_turret"
+                    case "KEY_LEFT":
+                        movement.data = "turret_left"
+                    case "KEY_RIGHT":
+                        movement.data = "turret_right"
+                    case "KEY_UP":
                         movement.data = "turret_up"
-                    case "j":
+                    case "KEY_DOWN":
                         movement.data = "turret_down"
                     case "w":
                         movement.data = "forward"

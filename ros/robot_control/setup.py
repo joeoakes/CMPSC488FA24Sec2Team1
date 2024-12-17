@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = "move_wheels"
+package_name = "robot_control"
 
 setup(
     name=package_name,
@@ -19,7 +19,7 @@ setup(
     tests_require=["pytest"],
     entry_points={
         "console_scripts": [
-            "run_wheels = move_wheels.wheels:main",
+            "robot_control = robot_control.control:main",
         ],
     },
 )
