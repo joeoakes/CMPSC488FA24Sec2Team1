@@ -1,4 +1,6 @@
-from time import sleep
+from time import sleep, thread_time
+
+# test
 from typing import Tuple
 
 from adafruit_servokit import ServoKit
@@ -19,18 +21,22 @@ class Turret:
         phi_channel: int,
         theta_limits: Tuple[float, float],
         phi_limits: Tuple[float, float],
+        theta_zero=0,
+        phi_zero=90,
     ):
-        self.theta = float(0)
-        self.phi = float(0)
         self.servo_kit = ServoKit(channels=16)
         self.theta_channel = theta_channel
         self.phi_channel = phi_channel
         self.theta_limits = theta_limits
         self.phi_limits = phi_limits
+        self.theta = float(theta_zero)
+        self.phi = float(phi_zero)
+        self.theta_zero = theta_zero
+        self.phi_zero = phi_zero
 
         self.servo_kit.servo[self.theta_channel].set_pulse_width_range(500, 2500)
         self.servo_kit.servo[self.phi_channel].set_pulse_width_range(500, 2500)
-        self.move_to_zero()
+        self.slow_zero()
 
     def rotate(self, d_theta: float, d_phi: float):
         """
@@ -57,10 +63,25 @@ class Turret:
         self.phi = new_phi
 
     def move_to_zero(self):
-        self.servo_kit.servo[self.theta_channel].angle = 0
-        self.servo_kit.servo[self.phi_channel].angle = 0
-        self.theta = 0
-        self.phi = 0
+        self.servo_kit.servo[self.theta_channel].angle = self.theta_zero
+        self.servo_kit.servo[self.phi_channel].angle = self.phi_zero
+        self.theta = self.theta_zero
+        self.phi = self.phi_zero
+
+    def slow_zero(self, delay=0.1):
+        theta_step = 1 if self.theta_zero > self.theta else -1
+        phi_step = 1 if self.phi_zero > self.phi else -1
+
+        for theta in range(int(self.theta), self.theta_zero, theta_step):
+            self.servo_kit.servo[self.theta_channel].angle = theta
+            sleep(delay)
+
+        for phi in range(int(self.phi), self.phi_zero, phi_step):
+            self.servo_kit.servo[self.phi_channel].angle = phi
+            sleep(delay)
+
+        # just in case
+        self.move_to_zero()
 
     def reset_calibration(self):
         self.theta = 0
@@ -80,4 +101,4 @@ if __name__ == "__main__":
         print(i)
         turret.rotate(i, i)
         sleep(0.5)
-    # turret.move_to_zero()
+    turret.move_to_zero()
