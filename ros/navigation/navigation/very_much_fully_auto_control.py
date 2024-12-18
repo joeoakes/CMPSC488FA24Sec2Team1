@@ -11,7 +11,6 @@ class MovementPublisher(Node):
         self.wheels_pub = self.create_publisher(WheelsInstruction, "/wheels_cmd", 1)
         self.turret_pub = self.create_publisher(TurretInstruction, "/turret_cmd", 1)
 
-        # self.movement_pub.publish(")
         curses.wrapper(self.loop)
 
     def loop(self, win):
@@ -56,6 +55,7 @@ class MovementPublisher(Node):
                         wheels.direction = WheelsInstruction.STOP
 
                 self.wheels_pub.publish(wheels)
+                self.turret_pub.publish(turret)
 
                 win.clear()
                 win.addstr("Detected key:")
