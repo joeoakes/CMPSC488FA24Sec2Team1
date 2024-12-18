@@ -6,4 +6,4 @@ uint8 BACKWARD = 4
 uint8 STRAFE_LEFT = 5
 uint8 STRAFE_RIGHT = 6
 uint8 direction
-float32 speed
+float32 speed 1.0
