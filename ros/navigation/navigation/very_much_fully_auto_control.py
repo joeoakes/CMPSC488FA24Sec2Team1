@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import String
+from robot_interfaces.msg import TurretInstruction, WheelsInstruction
 import curses
 
 
 class MovementPublisher(Node):
     def __init__(self):
         super().__init__("movement_publisher")
-        self.movement_pub = self.create_publisher(String, "/move_cmd", 10)
+        self.wheels_pub = self.create_publisher(WheelsInstruction, "/wheels_cmd", 1)
+        self.turret_pub = self.create_publisher(TurretInstruction, "/turret_cmd", 1)
 
         # self.movement_pub.publish(")
         curses.wrapper(self.loop)
@@ -18,40 +19,43 @@ class MovementPublisher(Node):
         key = ""
         win.clear()
         win.addstr("Detected key:")
-        movement = String()
+        wheels = WheelsInstruction()
+        wheels.speed = 1.0
+        turret = TurretInstruction()
         while 1:
             try:
                 key = win.getkey()
 
-                movement.data = "stop"
+                wheels.direction = WheelsInstruction.STOP
                 match str(key):
                     case " ":
-                        movement.data = "fire"
+                        turret.laser_duration = 0.5
                     case "r":
-                        movement.data = "zero_turret"
+                        turret.zero_turret = True
                     case "KEY_LEFT":
-                        movement.data = "turret_left"
+                        turret.phi = 1
                     case "KEY_RIGHT":
-                        movement.data = "turret_right"
+                        turret.phi = -1
                     case "KEY_UP":
-                        movement.data = "turret_up"
+                        turret.theta = 1
                     case "KEY_DOWN":
-                        movement.data = "turret_down"
+                        turret.theta = -1
                     case "w":
-                        movement.data = "forward"
+                        wheels.direction = WheelsInstruction.FORWARD
                     case "s":
-                        movement.data = "backward"
+                        wheels.direction = WheelsInstruction.BACKWARD
                     case "d":
-                        movement.data = "strafe_right"
+                        wheels.direction = WheelsInstruction.STRAFE_RIGHT
                     case "a":
-                        movement.data = "strafe_left"
+                        wheels.direction = WheelsInstruction.STRAFE_LEFT
                     case "e":
-                        movement.data = "turn_right"
+                        wheels.direction = WheelsInstruction.TURN_RIGHT
                     case "q":
-                        movement.data = "turn_left"
+                        wheels.direction = WheelsInstruction.TURN_LEFT
                     case "p":
-                        movement.data = "stop"
-                self.movement_pub.publish(movement)
+                        wheels.direction = WheelsInstruction.STOP
+
+                self.wheels_pub.publish(wheels)
 
                 win.clear()
                 win.addstr("Detected key:")

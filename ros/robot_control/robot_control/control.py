@@ -1,8 +1,10 @@
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import Float32, String
+from robot_interfaces.msg import TurretInstruction, WheelsInstruction
 from move_wheels.motor_controller import MotorController
 from move_wheels.turret import Turret
+from gpiozero import OutputDevice
+import time
 
 # Motor channel definitions
 THETA_LIMIT = (0, 70)
@@ -19,17 +21,21 @@ class MotorDriver(Node):
         self.motor = MotorController()
         self.turret = Turret(8, 9, THETA_LIMIT, PHI_LIMIT, 45)
 
-        self.subscription = self.create_subscription(
-            String, "/move_cmd", self.cmd_callback, 1
+        self.wheels_sub = self.create_subscription(
+            WheelsInstruction, "/wheels_cmd", self.wheels_callback, 1
         )
 
-        self.laser_fire = self.create_publisher(Float32, "/fire_lazer", 1)
+        self.turret_sub = self.create_subscription(
+            TurretInstruction, "/turret_cmd", self.turret_callback, 1
+        )
+
+        self.laser = OutputDevice(17)  # CHANGE NUMBER TO USED GPIO PIN
 
         self.get_logger().info("Directional Motor Driver Node Initialized")
 
-    def cmd_callback(self, msg):
-        direction = msg.data
-        speed = 1  # msg.speed or something
+    def wheels_callback(self, msg: WheelsInstruction):
+        direction = msg.direction
+        speed = msg.speed
         if direction == self.last_direction:
             self.get_logger().info("same as last direction, ignored")
             return
@@ -40,54 +46,40 @@ class MotorDriver(Node):
 
         self.last_direction = direction
         match direction:
-            case "fire":
-                self.last_direction = ""
-                fire = Float32()
-                fire.data = 1.0
-                self.laser_fire.publish(fire)
-            case "turret_right":
-                self.last_direction = ""
-                try:
-                    self.turret.rotate(0, -1)
-                except ValueError:
-                    pass
-            case "turret_left":
-                self.last_direction = ""
-                try:
-                    self.turret.rotate(0, 1)
-                except ValueError:
-                    pass
-            case "turret_down":
-                self.last_direction = ""
-                try:
-                    self.turret.rotate(1, 0)
-                except ValueError:
-                    pass
-            case "turret_up":
-                self.last_direction = ""
-                try:
-                    self.turret.rotate(-1, 0)
-                except ValueError:
-                    pass
-            case "zero_turret":
-                self.turret.slow_zero()
-                self.get_logger().info("zeroing")
-            case "strafe_left":
+            case WheelsInstruction.STRAFE_LEFT:
                 self.motor.move_left(speed)
-            case "strafe_right":
+            case WheelsInstruction.STRAFE_RIGHT:
                 self.motor.move_right(speed)
-            case "forward":
+            case WheelsInstruction.FORWARD:
                 self.motor.move_forward(speed)
-            case "backward":
+            case WheelsInstruction.BACKWARD:
                 self.motor.move_backward(speed)
-            case "turn_left":
+            case WheelsInstruction.TURN_LEFT:
                 self.motor.rotate_counterclockwise(speed / 3)
-            case "turn_right":
+            case WheelsInstruction.TURN_RIGHT:
                 self.motor.rotate_clockwise(speed / 3)
-            case "stop":
+            case WheelsInstruction.STOP:
                 self.motor.stop_all()
             case _:
-                self.get_logger().warn(f"Unrecoginized instruction: {direction}")
+                self.get_logger().warn(f"Unrecoginized wheels instruction: {direction}")
+                self.motor.stop_all()
+
+    def turret_callback(self, msg: TurretInstruction):
+        if msg.laser_duration > 0:
+            self.laser.on()
+            time.sleep(msg.laser_duration)
+            self.laser.off()
+
+        if msg.zero_turret:
+            try:
+                self.turret.slow_zero()
+            except ValueError:
+                pass
+        else:
+            try:
+                self.turret.rotate(msg.theta, msg.phi)
+            except ValueError:
+                pass
 
     def destroy(self):
         self.motor.stop_all()
@@ -105,7 +97,3 @@ def main(args=None):
         driver.destroy_node()
         driver.destroy()
         rclpy.shutdown()
-
-
-if __name__ == "__main__":
-    main()
