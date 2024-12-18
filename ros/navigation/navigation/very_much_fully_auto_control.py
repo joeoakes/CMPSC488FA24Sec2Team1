@@ -18,11 +18,10 @@ class MovementPublisher(Node):
         key = ""
         win.clear()
         win.addstr("Detected key:")
-        wheels = WheelsInstruction()
-        wheels.speed = 1.0
-        turret = TurretInstruction()
         while 1:
             try:
+                wheels = WheelsInstruction()
+                turret = TurretInstruction()
                 key = win.getkey()
 
                 wheels.direction = WheelsInstruction.STOP
@@ -32,13 +31,13 @@ class MovementPublisher(Node):
                     case "r":
                         turret.zero_turret = True
                     case "KEY_LEFT":
-                        turret.phi = 1
+                        turret.phi = 1.0
                     case "KEY_RIGHT":
-                        turret.phi = -1
+                        turret.phi = -1.0
                     case "KEY_UP":
-                        turret.theta = 1
+                        turret.theta = 1.0
                     case "KEY_DOWN":
-                        turret.theta = -1
+                        turret.theta = -1.0
                     case "w":
                         wheels.direction = WheelsInstruction.FORWARD
                     case "s":
