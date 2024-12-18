@@ -5,11 +5,6 @@ from move_wheels.motor_controller import MotorController
 from move_wheels.turret import Turret
 
 # Motor channel definitions
-FRONT_LEFT = 0
-FRONT_RIGHT = 1
-BACK_LEFT = 2
-BACK_RIGHT = 3
-
 THETA_LIMIT = (0, 70)
 PHI_LIMIT = (0, 180)
 

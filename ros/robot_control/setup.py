@@ -19,6 +19,7 @@ setup(
     tests_require=["pytest"],
     entry_points={
         "console_scripts": [
+            "twist_control = robot_control.twist_control:main",
             "robot_control = robot_control.control:main",
         ],
     },
