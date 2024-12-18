@@ -32,7 +32,6 @@ def generate_launch_description():
                     "frame_id": "kinect_link",
                     "approx_sync": "true",
                     "rtabmap_viz": "false",
-                    # "rtabmap_viz": "true",
                     # "rviz": "true",
                 }.items(),
             ),

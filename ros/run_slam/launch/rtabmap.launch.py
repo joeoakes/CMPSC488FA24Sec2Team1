@@ -298,13 +298,16 @@ def launch_setup(context, *args, **kwargs):
                 "Mem/IncrementalMemory": "true",
                 "Mem/InitWMWithAllNodes": ConditionalText("true", "false", IfCondition(PythonExpression(["'", LaunchConfiguration('localization'), "' == 'true'"]))._predicate_func(context)).perform(context),
                 "Mem/RehearsalSimilarity":'0.45',
-		 "Rtabmap/DetectionRate":'3.0',
-		"RGBD/ProxityBySpace":"true",
-		"Mem/STMSize":'30',
-		"Mem/NotLinkedNodesKept":"true",
-		"Grid/Enabled":"true",
-		"publish_full_map":"true",
-                "map_always_update": True
+                "Rtabmap/DetectionRate":'1.0',
+                "RGBD/ProxityBySpace":"true",
+                "Mem/STMSize":'30',
+                "Reg/Force3DoF": "true",
+                "Mem/NotLinkedNodesKept":"true",
+                "Grid/Enabled":"true",
+                "publish_full_map":"true",
+                "map_always_update": True,
+                "camera_frame_id": "camera_link",
+                "rgb_frame_id": "camera_optical_link"
             }],
             remappings=[
                 ("map", LaunchConfiguration('map_topic')),
