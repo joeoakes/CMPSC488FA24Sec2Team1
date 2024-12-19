@@ -2,7 +2,7 @@
 build/
 .nvim.lua
 
-# catkin stuff
+# ros stuff
 CMakeCache.txt
 CMakeFiles
 Makefile
@@ -12,6 +12,8 @@ build
 devel
 log
 install
+*.gv
+*.pdf
 
 # Python
 __pycache__
