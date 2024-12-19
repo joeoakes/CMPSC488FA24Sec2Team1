@@ -5,6 +5,8 @@ import time
 import numpy as np
 from typing import List
 from rclpy.node import Node
+from rclpy import logging
+from rclpy.executors import ExternalShutdownException
 from robot_interfaces.msg import TurretInstruction
 from . import visualizeArilTag
 
@@ -78,9 +80,7 @@ class TurretPublisher(Node):
 
             img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
             cv2.imshow("Camera", img)
-
-            if cv2.waitKey(1) == ord("q"):
-                break
+            cv2.waitKey(1)
 
             if not detection_center:
                 if int(time.time()) - last_seconds > 3 and not zerod:
@@ -133,4 +133,9 @@ class TurretPublisher(Node):
 def main(args=None):
     rclpy.init(args=args)
     auto_turret = TurretPublisher()
-    rclpy.spin(auto_turret)
+    try:
+        rclpy.spin(auto_turret)
+    except (KeyboardInterrupt, ExternalShutdownException):
+        logging.get_logger("logger").info("Shutting down automated turret")
+
+    auto_turret.destroy_node()

@@ -1,4 +1,6 @@
 import rclpy
+from rclpy import logging
+from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
 from robot_interfaces.msg import TurretInstruction, WheelsInstruction
 from .motor_controller import MotorController
@@ -87,6 +89,7 @@ class MotorDriver(Node):
 
     def destroy(self):
         self.motor.stop_all()
+        self.turret.slow_zero()
 
 
 def main(args=None):
@@ -95,9 +98,8 @@ def main(args=None):
 
     try:
         rclpy.spin(driver)
-    except KeyboardInterrupt:
-        driver.get_logger().info("Shutting down")
-    finally:
-        driver.destroy_node()
-        driver.destroy()
-        rclpy.shutdown()
+    except (KeyboardInterrupt, ExternalShutdownException):
+        logging.get_logger("logger").info("Shutting down robot control")
+
+    driver.destroy()
+    driver.destroy_node()
