@@ -1,14 +1,15 @@
 import rclpy
 from rclpy.node import Node
 from robot_interfaces.msg import TurretInstruction, WheelsInstruction
-from move_wheels.motor_controller import MotorController
-from move_wheels.turret import Turret
+from .motor_controller import MotorController
+from .turret import Turret
 from gpiozero import OutputDevice
 import time
 
 # Motor channel definitions
 THETA_LIMIT = (0, 70)
 PHI_LIMIT = (0, 180)
+LASER_DELAY = 3  # seconds
 
 
 class MotorDriver(Node):
@@ -20,6 +21,8 @@ class MotorDriver(Node):
         # Initialize ServoKit for PCA9685
         self.motor = MotorController()
         self.turret = Turret(8, 9, THETA_LIMIT, PHI_LIMIT, 45)
+        self.laser = OutputDevice(17)  # CHANGE NUMBER TO USED GPIO PIN
+        self.last_laser_fire = int(time.time())
 
         self.wheels_sub = self.create_subscription(
             WheelsInstruction, "/wheels_cmd", self.wheels_callback, 1
@@ -28,8 +31,6 @@ class MotorDriver(Node):
         self.turret_sub = self.create_subscription(
             TurretInstruction, "/turret_cmd", self.turret_callback, 1
         )
-
-        self.laser = OutputDevice(17)  # CHANGE NUMBER TO USED GPIO PIN
 
         self.get_logger().info("Directional Motor Driver Node Initialized")
 
@@ -65,7 +66,10 @@ class MotorDriver(Node):
                 self.motor.stop_all()
 
     def turret_callback(self, msg: TurretInstruction):
-        if msg.laser_duration > 0:
+        if msg.laser_duration > 0 and (int(time.time()) - self.last_laser_fire > LASER_DELAY
+        ):
+            self.last_laser_fire = int(time.time())
+            self.get_logger().info(f"firing my laser for {msg.laser_duration}")
             self.laser.on()
             time.sleep(msg.laser_duration)
             self.laser.off()

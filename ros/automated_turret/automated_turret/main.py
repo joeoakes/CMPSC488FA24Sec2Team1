@@ -1,13 +1,15 @@
 import apriltag
 import cv2
 import rclpy
+import time
+import numpy as np
 from typing import List
 from rclpy.node import Node
 from robot_interfaces.msg import TurretInstruction
 from . import visualizeArilTag
 
-DEAD_ZONE = 5
-
+DEAD_ZONE = 10
+MAX_SPEED = 5.0
 
 class TurretPublisher(Node):
     def __init__(self):
@@ -36,8 +38,10 @@ class TurretPublisher(Node):
         return max(filtered_detections, key=lambda detection: detection.goodness)
 
     def run_turret(self):
-        turret = TurretInstruction()
+        last_seconds = int(time.time())
+        zerod = False
         while 1:
+            turret = TurretInstruction()
             _, img = self.camera.read()
 
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -54,7 +58,7 @@ class TurretPublisher(Node):
                 )
                 cv2.circle(img, detection_center, 10, (255, 0, 0), -1)
 
-            cv2.circle(img, self.img_center, 10, (0, 255, 0), -1)
+            cv2.circle(img, self.img_center, DEAD_ZONE, (0, 255, 0), -1)
             cv2.line(
                 img,
                 (self.camera_width // 2, self.camera_height),
@@ -79,22 +83,51 @@ class TurretPublisher(Node):
                 break
 
             if not detection_center:
+                if int(time.time()) - last_seconds > 3 and not zerod:
+                    self.get_logger().info("zeroing...")
+                    turret.zero_turret = True
+                    zerod = True
+                    self.turret_pub.publish(turret)
                 continue
 
-            if detection_center[0] - self.img_center[0] > DEAD_ZONE:
-                turret.theta = 0.1
+            distance = abs(
+                np.linalg.norm(
+                    [
+                        self.img_center[0] - detection_center[0],
+                        self.img_center[1] - detection_center[1],
+                    ]
+                )
+            )
 
-            if detection_center[0] - self.img_center[0] < DEAD_ZONE:
-                turret.theta = -0.1
+            speed = min(((distance * 0.01) ** 3) * MAX_SPEED, MAX_SPEED)
+            speed = 0.1 if speed < 0.1 and speed > 0 else speed
+            centered = True
+
+            if detection_center[0] - self.img_center[0] > DEAD_ZONE:
+                centered = False
+                turret.theta = speed
+
+            if detection_center[0] - self.img_center[0] < -DEAD_ZONE:
+                centered = False
+                turret.theta = -speed
 
             if detection_center[1] - self.img_center[1] > DEAD_ZONE:
-                turret.phi = 0.1
+                centered = False
+                turret.phi = speed
 
-            if detection_center[1] - self.img_center[1] < DEAD_ZONE:
-                turret.phi = -0.1
+            if detection_center[1] - self.img_center[1] < -DEAD_ZONE:
+                centered = False
+                turret.phi = -speed
 
-            self.get_logger().info("publishing turret")
+            if centered:
+                turret.laser_duration = 0.5
+
+            self.get_logger().info(
+                f"Turning theta: {turret.theta}, phi: {turret.phi}, firing: {turret.laser_duration}"
+            )
             self.turret_pub.publish(turret)
+            last_seconds = int(time.time())
+            zerod = False
 
 
 def main(args=None):
