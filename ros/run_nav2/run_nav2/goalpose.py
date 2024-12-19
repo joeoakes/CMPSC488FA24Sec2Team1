@@ -12,7 +12,7 @@ class GoalPosePublisher(Node):
         self.goal_publisher = self.create_publisher(PoseStamped, "goal_pose", 10)
 
         self.x = 0.0
-        self.y = 1.0
+        self.y = 0.5
         self.z = 0.0
         self.orientation_w = 1.0
 

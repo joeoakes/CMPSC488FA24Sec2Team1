@@ -30,6 +30,7 @@ setup(
             "odom_base_tf = run_nav2.odom_base_tf:main",
             "odom_test_data = run_nav2.odom_test_data:main",
             "rtabodom = run_nav2.rtabodom:main",
+            "maprelay = run_nav2.maprelay:main",
         ],
     },
 )
