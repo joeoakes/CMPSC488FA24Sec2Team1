@@ -1,6 +1,4 @@
-from time import sleep, thread_time
-
-# test
+from time import sleep
 from typing import Tuple
 
 from adafruit_servokit import ServoKit
@@ -68,7 +66,7 @@ class Turret:
         self.theta = self.theta_zero
         self.phi = self.phi_zero
 
-    def slow_zero(self, delay=0.1):
+    def slow_zero(self, delay=0.01):
         theta_step = 1 if self.theta_zero > self.theta else -1
         phi_step = 1 if self.phi_zero > self.phi else -1
 
